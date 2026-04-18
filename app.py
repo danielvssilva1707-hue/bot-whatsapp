@@ -1,74 +1,69 @@
 from flask import Flask, request, Response
 from twilio.twiml.messaging_response import MessagingResponse
+import os
 
 app = Flask(__name__)
 
-PIX_KEY = "24103596805"
+SITE_ONG = "https://gerandofalcoes.com"
 
 
 def menu():
     return (
-        "Bem-vindo à Gerando Falcões.\n\n"
+        "Bem-vindo à ONG\n\n"
         "Digite uma opção:\n"
         "1 - Sobre a ONG\n"
         "2 - Doações\n"
         "3 - Projetos\n"
-        "4 - Atendente humano"
+        "MENU - Voltar"
     )
 
 
 def sobre_ong():
     return (
-        "A Gerando Falcões é uma ONG brasileira com atuação em São Paulo, focada na transformação de comunidades em situação de vulnerabilidade social. "
-        "A organização desenvolve projetos de educação, combate à fome, inclusão digital e geração de oportunidades. "
-        "Seu objetivo é reduzir desigualdades e criar caminhos reais para que jovens e famílias tenham acesso à educação, trabalho e melhor qualidade de vida."
+        "A ONG atua em São Paulo transformando comunidades em situação de vulnerabilidade social.\n\n"
+        "Trabalha com educação, alimentação, inclusão digital e geração de oportunidades para jovens e famílias."
     )
 
 
 def doacoes():
     return (
-        f"Doações via PIX:\n{PIX_KEY}\n\n"
-        "As doações ajudam em projetos de alimentação, educação e inclusão digital para famílias em situação de vulnerabilidade."
+        "Para apoiar a ONG, acesse o site oficial:\n\n"
+        f"{SITE_ONG}\n\n"
+        "Lá você encontra informações sobre como contribuir."
     )
 
 
 def projetos():
     return (
         "Projetos da ONG:\n\n"
-        "1 - Educação: reforço escolar para crianças e adolescentes\n"
-        "2 - Alimento Solidário: distribuição de cestas básicas\n"
-        "3 - Jovem Futuro: cursos profissionalizantes\n"
-        "4 - Inclusão Digital: aulas de informática e tecnologia\n"
-        "5 - Ação Social: apoio a famílias em vulnerabilidade"
+        "1 - Educação: reforço escolar e apoio pedagógico para crianças e adolescentes.\n"
+        "2 - Alimento Solidário: distribuição de cestas básicas para famílias em situação de vulnerabilidade.\n"
+        "3 - Jovem Futuro: cursos profissionalizantes para preparação ao mercado de trabalho.\n"
+        "4 - Inclusão Digital: aulas de tecnologia, informática e capacitação digital.\n"
+        "5 - Ação Social: apoio direto a famílias com necessidades básicas e acompanhamento social."
     )
 
 
-def atendente():
-    return "Um voluntário irá te atender em breve."
-
-
-def opcao_invalida():
-    return "Opção inválida. Digite MENU para ver as opções."
-
-
 def processar_mensagem(msg):
-    if not msg:
-        return menu()
+    if not msg or msg.strip() == "":
+        return "Olá\n\n" + menu()
 
     msg = msg.lower().strip()
 
-    if msg in ["menu", "oi", "ola", "olá"]:
-        return menu()
+    if msg in ["menu", "oi", "ola", "olá", "iniciar"]:
+        return "Olá\n\n" + menu()
+
     elif msg == "1":
         return sobre_ong()
+
     elif msg == "2":
         return doacoes()
+
     elif msg == "3":
         return projetos()
-    elif msg == "4":
-        return atendente()
+
     else:
-        return opcao_invalida()
+        return "Opção inválida\nDigite MENU para ver as opções."
 
 
 @app.route("/whatsapp", methods=["POST"])
@@ -84,8 +79,9 @@ def whatsapp():
 
 @app.route("/")
 def home():
-    return "Chatbot ativo"
+    return "Bot ativo"
 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
