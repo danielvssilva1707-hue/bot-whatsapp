@@ -9,7 +9,7 @@ SITE_ONG = "https://gerandofalcoes.com"
 
 def menu():
     return (
-        "Bem-vindo à ONG\n\n"
+        "Bem-vindo à ONG Geraldo Falcões\n\n"
         "Digite uma opção:\n"
         "1 - Sobre a ONG\n"
         "2 - Doações\n"
@@ -20,8 +20,10 @@ def menu():
 
 def sobre_ong():
     return (
-        "A ONG atua em São Paulo transformando comunidades em situação de vulnerabilidade social.\n\n"
-        "Trabalha com educação, alimentação, inclusão digital e geração de oportunidades para jovens e famílias."
+        "A Gerando Falcões é uma ONG brasileira com atuação em São Paulo, focada na transformação de comunidades em situação de vulnerabilidade social.\n\n"
+        "Desenvolve projetos de educação, combate à fome, inclusão digital e geração de oportunidades.\n\n"
+        "Seu objetivo é reduzir desigualdades e criar oportunidades reais para jovens e famílias."
+
     )
 
 
