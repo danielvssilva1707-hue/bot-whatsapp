@@ -13,40 +13,49 @@ def menu():
         "Digite uma opção:\n"
         "1 - Sobre a ONG\n"
         "2 - Doações\n"
-        "3 - Projetos\n"
-        "MENU - Voltar"
+        "3 - Projetos\n\n"
+        "Digite MENU para voltar"
     )
 
 
 def sobre_ong():
     return (
-        "A Gerando Falcões é uma ONG brasileira com atuação em São Paulo, focada na transformação de comunidades em situação de vulnerabilidade social.\n\n"
-        "Desenvolve projetos de educação, combate à fome, inclusão digital e geração de oportunidades.\n\n"
-        "Seu objetivo é reduzir desigualdades e criar oportunidades reais para jovens e famílias."
+        "A Gerando Falcões é uma ONG brasileira que atua na transformação de comunidades em situação de vulnerabilidade social.\n\n"
+        "Trabalha com educação, combate à fome, inclusão digital e geração de oportunidades.\n\n"
+        "Objetivo: reduzir desigualdades e gerar oportunidades reais."
     )
 
 
 def doacoes():
     return (
-        "Para apoiar a ONG, acesse o site oficial:\n\n"
+        "Para apoiar a ONG, acesse:\n\n"
         f"{SITE_ONG}\n\n"
-        "Lá você encontra informações sobre como contribuir."
+        "Sua ajuda faz a diferença!"
     )
 
 
 def projetos():
     return (
         "Projetos da ONG:\n\n"
-        "1 - Educação: reforço escolar e apoio pedagógico para crianças e adolescentes.\n"
-        "2 - Alimento Solidário: distribuição de cestas básicas para famílias em situação de vulnerabilidade.\n"
-        "3 - Jovem Futuro: cursos profissionalizantes para preparação ao mercado de trabalho.\n"
-        "4 - Inclusão Digital: aulas de tecnologia, informática e capacitação digital.\n"
-        "5 - Ação Social: apoio direto a famílias com necessidades básicas e acompanhamento social."
+        "1 - Educação\n"
+        "Reforço escolar e apoio pedagógico para crianças e adolescentes.\n\n"
+
+        "2 - Alimento Solidário\n"
+        "Distribuição de cestas básicas para famílias em situação de vulnerabilidade.\n\n"
+
+        "3 - Jovem Futuro\n"
+        "Cursos profissionalizantes para preparação ao mercado de trabalho.\n\n"
+
+        "4 - Inclusão Digital\n"
+        "Aulas de tecnologia, informática e capacitação digital.\n\n"
+
+        "5 - Ação Social\n"
+        "Apoio direto a famílias com necessidades básicas e acompanhamento social."
     )
 
 
 def processar_mensagem(msg):
-    if not msg or msg.strip() == "":
+    if not msg:
         return menu()
 
     msg = msg.lower().strip()
@@ -64,25 +73,36 @@ def processar_mensagem(msg):
         return projetos()
 
     else:
-        return "Opção inválida\nDigite MENU para ver as opções."
+        return "Opção inválida.\nDigite MENU para ver as opções."
 
 
 @app.route("/whatsapp", methods=["POST"])
 def whatsapp():
-    msg = request.form.get("Body", "")
-    resposta = processar_mensagem(msg)
+    try:
+        msg = request.form.get("Body", "")
+        print(f"Mensagem recebida: {msg}")
 
-    twilio_resp = MessagingResponse()
-    twilio_resp.message(resposta)
+        resposta = processar_mensagem(msg)
 
-    return Response(str(twilio_resp), mimetype="application/xml")
+        twilio_resp = MessagingResponse()
+        twilio_resp.message(resposta)
+
+        return Response(str(twilio_resp), mimetype="application/xml")
+
+    except Exception as e:
+        print(f"Erro: {e}")
+
+        twilio_resp = MessagingResponse()
+        twilio_resp.message("Erro interno. Tente novamente.")
+
+        return Response(str(twilio_resp), mimetype="application/xml")
 
 
 @app.route("/")
 def home():
-    return "Bot ativo"
+    return "Bot ativo "
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)
