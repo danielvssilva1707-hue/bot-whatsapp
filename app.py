@@ -9,7 +9,7 @@ SITE_ONG = "https://gerandofalcoes.com"
 
 def menu():
     return (
-        "Bem-vindo à ONG Geraldo Falcões\n\n"
+        "Bem-vindo à ONG Gerando Falcões\n\n"
         "Digite uma opção:\n"
         "1 - Sobre a ONG\n"
         "2 - Doações\n"
@@ -23,7 +23,6 @@ def sobre_ong():
         "A Gerando Falcões é uma ONG brasileira com atuação em São Paulo, focada na transformação de comunidades em situação de vulnerabilidade social.\n\n"
         "Desenvolve projetos de educação, combate à fome, inclusão digital e geração de oportunidades.\n\n"
         "Seu objetivo é reduzir desigualdades e criar oportunidades reais para jovens e famílias."
-
     )
 
 
@@ -48,12 +47,12 @@ def projetos():
 
 def processar_mensagem(msg):
     if not msg or msg.strip() == "":
-        return "Olá\n\n" + menu()
+        return menu()
 
     msg = msg.lower().strip()
 
     if msg in ["menu", "oi", "ola", "olá", "iniciar"]:
-        return "Olá\n\n" + menu()
+        return menu()
 
     elif msg == "1":
         return sobre_ong()
